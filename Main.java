@@ -123,7 +123,13 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDiscreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscreteActionPerformed
-        // TODO add your handling code here:
+        TransformDiscrete frame = new TransformDiscrete();
+        frame.setTitle("Primer Laboratorio Señales y Sistemas");
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        frame.setIconImage(icon.getImage());
+        dispose();
     }//GEN-LAST:event_btnDiscreteActionPerformed
 
     

@@ -60,32 +60,31 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         
         CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot();
         Color[] lineColors = new Color[3];
-        for (int i = 0; i < 3; i++){
-            switch (type){
-                case "Señal 1" ->{
-                    lineColors[0] = Color.decode("#FF00FF");
-                    lineColors[1] = Color.decode("#9908FF");
-                    lineColors[2] = Color.decode("#FF0074");
-                }
-                case "Señal 2" ->{
-                    lineColors[0] = Color.decode("#7F00FF");
-                    lineColors[1] = Color.decode("#9F10C0");
-                    lineColors[2] = Color.decode("#BF2080");
-                }
-                case "Señal 3" ->{
-                    lineColors[0] = Color.decode("#0099FF");
-                    lineColors[1] = Color.decode("#00BBFF");
-                    lineColors[2] = Color.decode("#00CC88");
-                }
+        switch (type){
+            case "Señal 1" ->{
+                lineColors[0] = Color.decode("#FF00FF");
+                lineColors[1] = Color.decode("#9908FF");
+                lineColors[2] = Color.decode("#FF0074");
+            }
+            case "Señal 2" ->{
+                lineColors[0] = Color.decode("#7F00FF");
+                lineColors[1] = Color.decode("#9F10C0");
+                lineColors[2] = Color.decode("#BF2080");
+            }
+            case "Señal 3" ->{
+                lineColors[0] = Color.decode("#0099FF");
+                lineColors[1] = Color.decode("#00BBFF");
+                lineColors[2] = Color.decode("#00CC88");
             }
         }
+        
 
         
         for (int i = 0; i < datasets.length; i++) {
             XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
             renderer.setSeriesPaint(0, lineColors[i]);
             renderer.setSeriesStroke(0, new BasicStroke(3f));
-            XYPlot subplot = new XYPlot(datasets[i], new org.jfree.chart.axis.NumberAxis("t"),
+            XYPlot subplot = new XYPlot(datasets[i], new org.jfree.chart.axis.NumberAxis("n"),
                     new org.jfree.chart.axis.NumberAxis("x"), renderer);
             combinedPlot.add(subplot);
         }
@@ -93,12 +92,25 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         chart.getXYPlot().getDomainAxis().setVisible(false);
         chart.getXYPlot().getRangeAxis().setVisible(false);
 
-        String ampName = String.valueOf(at0[0]);
+        int mnValueAsInt = (int) (Math.abs(at0[0])* 100); // Convert to an integer (e.g., 0.5 -> 50)
+        String ampName;
+
+        ampName = switch (mnValueAsInt) {
+            case 50 -> "1/2";
+            case 33 -> "1/3";
+            case 25 -> "1/4";
+            case 20 -> "1/5";
+            default -> String.valueOf(at0[0]);
+        };
+        if (at0[0] < 0) ampName = "-" + ampName; 
+        
         String delayName = String.valueOf(Math.abs(at0[1]));
         String delaySign = "+";
         if (at0[1] < 0) delaySign = "-";
         String title = "Transformación de "+type+": x("+ampName+"t "+delaySign+" "+delayName+")";
         
+        
+        //Full plot
         chart.getXYPlot().setParent(combinedPlot);
         chart = new JFreeChart(
                 title,
@@ -108,13 +120,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         );
         
         Color pink = Color.decode("#fceaf1");
-        /*Color lineColor;
-        switch (type){
-            case "Señal 1" -> lineColor = Color.MAGENTA;
-            case "Señal 2" -> lineColor = Color.decode("#7F00FF");
-            case "Señal 3" -> lineColor = Color.decode("#0099FF");
-            default -> lineColor = Color.MAGENTA;
-        }*/
         
         chart.setBackgroundPaint(pink);
         chart.getLegend().setBackgroundPaint(pink);
@@ -126,17 +131,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         plot.setRangeGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.lightGray);
         plot.setRangeGridlinePaint(Color.lightGray);
-        
-
-        /*renderer.setSeriesPaint(0, lineColor);
-        renderer.setSeriesShapesVisible(0, false);
-        renderer.setSeriesStroke(0, new BasicStroke(2f));
-        
-        renderer.setSeriesPaint(1, Color.BLUE);
-        renderer.setSeriesShapesVisible(1, false);
-        renderer.setSeriesStroke(1, new BasicStroke(2f));
-        
-        plot.setRenderer(renderer);*/
 
         return chart;
     }
@@ -172,8 +166,7 @@ public class ContinuousTransformed extends javax.swing.JFrame {
             series.add(t[i], x);
         }   
         dataset.addSeries(series);
-        XYLineAndShapeRenderer renderer1 = new XYLineAndShapeRenderer(true, false);
-        renderer1.setSeriesPaint(0, Color.green);
+
         return dataset;
     }  
     private static XYSeriesCollection methodDataset(String method){
@@ -201,8 +194,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
             }
             dataset.addSeries(series); 
         }
-        XYSplineRenderer renderer2 = new XYSplineRenderer();
-        renderer2.setSeriesPaint(0, Color.BLUE);
         return dataset;
     }
     private static XYSeriesCollection finalDataset(){
@@ -217,8 +208,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
             series.add(newT, originalX);
         }
         dataset.addSeries(series);
-        XYSplineRenderer renderer2 = new XYSplineRenderer();
-        renderer2.setSeriesPaint(0, Color.pink);
         return dataset;
     }
     
@@ -284,15 +273,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
     }//GEN-LAST:event_btnBackActionPerformed
-
-    //public static void main(String args[]) {
-        /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(new Runnable() {
-            //public void run() {
-                //new ContinuousRegular(type, limits, abc).setVisible(true);
-            //}
-        //});
-    //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel1;

@@ -2,31 +2,26 @@ package tello;
 
 import java.awt.event.ItemEvent;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author kevin
  */
-public class TransformContinuous extends javax.swing.JFrame {
+public class TransformDiscrete extends javax.swing.JFrame {
 
-    public TransformContinuous() {
+    public TransformDiscrete() {
         initComponents();
         ComboBoxChange();
-        appearSignalParameters(false, 0);
+        InterpolBoxChange();
         EverythingElse(false);
     }
 
-    public void appearSignalParameters(boolean signal1, int limit){
-        lblA.setVisible(signal1);
-        lblB.setVisible(signal1);
-        lblC.setVisible(signal1);
-        txtA.setVisible(signal1);
-        txtB.setVisible(signal1);
-        txtC.setVisible(signal1);
+    public void changeLimits(boolean signal1, int limit1, int limit2){
         txtLowerLimit.setEditable(signal1);
         txtUpperLimit.setEditable(signal1);
-        txtLowerLimit.setText(Integer.toString(-limit));
-        txtUpperLimit.setText(Integer.toString(limit));
+        txtLowerLimit.setText(Integer.toString(limit1));
+        txtUpperLimit.setText(Integer.toString(limit2));
     }
     public void EverythingElse(boolean signal){
         btnGenerate.setEnabled(signal);
@@ -39,6 +34,8 @@ public class TransformContinuous extends javax.swing.JFrame {
         comboBoxDelay.setVisible(signal);
         btnMethod.setVisible(signal);
         btnTransform.setVisible(signal);
+        lblInterpol.setVisible(signal);
+        comboBoxInterpol.setVisible(signal);
         
     }
     public void ComboBoxChange(){
@@ -48,33 +45,43 @@ public class TransformContinuous extends javax.swing.JFrame {
                 switch (selectedOption) {
                     case "Ninguna" -> {
                         lblImage.setIcon(null);
-                        appearSignalParameters(false, 0);
                         EverythingElse(false);
+                        changeLimits(false,0,0);
                     }
-                    case "Señal 1" ->{                    
-                        appearSignalParameters(true, 5);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/parabola.png");
+                    case "Señal 4" ->{                    
+                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig1.png");
                         lblImage.setIcon(image);
                         EverythingElse(true);
+                        changeLimits(true,1,14);
                     }
-                    case "Señal 2" ->{
-                        appearSignalParameters(false, 1);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/triangle.png");
+                    case "Señal 5" ->{
+                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig2.png");
                         lblImage.setIcon(image);
                         EverythingElse(true);
+                        changeLimits(false,-8,8);
                     }
-                    case "Señal 3" ->{
-                        appearSignalParameters(false, 10);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/exp.png");
+                    case "Señal 6" ->{
+                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig3.png");
                         lblImage.setIcon(image);
                         EverythingElse(true);
+                        changeLimits(false,-5,6);
                     }
                 }
                 
             }
         });
     }
-    
+    public void InterpolBoxChange(){
+        comboBoxAmp.addItemListener((ItemEvent e) -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedOption = (String) e.getItem();
+                switch (selectedOption) {
+                    case "2", "3", "4", "5" -> comboBoxInterpol.setEnabled(false);
+                    case "1/2", "1/3", "1/4", "1/5" -> comboBoxInterpol.setEnabled(true);
+                }
+            }
+        });
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -83,12 +90,6 @@ public class TransformContinuous extends javax.swing.JFrame {
         lblTitle = new javax.swing.JLabel();
         comboBoxSignal = new javax.swing.JComboBox<>();
         lblSignal = new javax.swing.JLabel();
-        lblA = new javax.swing.JLabel();
-        txtA = new javax.swing.JTextField();
-        txtB = new javax.swing.JTextField();
-        lblB = new javax.swing.JLabel();
-        txtC = new javax.swing.JTextField();
-        lblC = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         lblLowerLimit = new javax.swing.JLabel();
         txtLowerLimit = new javax.swing.JTextField();
@@ -106,56 +107,42 @@ public class TransformContinuous extends javax.swing.JFrame {
         btnTransform = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnMethod = new javax.swing.JToggleButton();
+        lblInterpol = new javax.swing.JLabel();
+        comboBoxInterpol = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lblTitle.setFont(new java.awt.Font("Harlow Solid Italic", 0, 36)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 51, 204));
-        lblTitle.setText("Transformar Señales Continuas");
+        lblTitle.setText("Transformar Señales Discretas");
 
         comboBoxSignal.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        comboBoxSignal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ninguna", "Señal 1", "Señal 2", "Señal 3" }));
+        comboBoxSignal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ninguna", "Señal 4", "Señal 5", "Señal 6" }));
 
         lblSignal.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         lblSignal.setText("Elige tu señal:");
-
-        lblA.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        lblA.setText("a:");
-
-        txtA.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        txtA.setText("1");
-
-        txtB.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        txtB.setText("0");
-
-        lblB.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        lblB.setText("b:");
-
-        txtC.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        txtC.setText("0");
-
-        lblC.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        lblC.setText("c:");
 
         lblLowerLimit.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         lblLowerLimit.setText("Límite inferior:");
 
         txtLowerLimit.setEditable(false);
         txtLowerLimit.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
+        txtLowerLimit.setText("0");
 
         lblUpperLimit.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         lblUpperLimit.setText("Límite superior:");
 
         txtUpperLimit.setEditable(false);
         txtUpperLimit.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
+        txtUpperLimit.setText("0");
 
-        lblEquation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tello/imgs/continuous.png"))); // NOI18N
+        lblEquation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tello/imgs/discrete.png"))); // NOI18N
 
         lblAmp.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        lblAmp.setText("a:");
+        lblAmp.setText("M:");
 
         lblDelay.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
-        lblDelay.setText("<html> t<sub>0</sub>: </html>");
+        lblDelay.setText("<html> n<sub>0</sub>: </html>");
 
         comboBoxAmp.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         comboBoxAmp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3", "4", "5", "1/2", "1/3", "1/4", "1/5" }));
@@ -211,75 +198,81 @@ public class TransformContinuous extends javax.swing.JFrame {
             }
         });
 
+        lblInterpol.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
+        lblInterpol.setText("Interpolación:");
+
+        comboBoxInterpol.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
+        comboBoxInterpol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ceros", "Escalón", "Lineal" }));
+        comboBoxInterpol.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblLowerLimit)
-                            .addComponent(lblUpperLimit))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtLowerLimit, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtUpperLimit, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(94, 94, 94)
-                        .addComponent(btnGenerate))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(lblSignal)
-                        .addGap(18, 18, 18)
-                        .addComponent(comboBoxSignal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnTransform, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblEquation, javax.swing.GroupLayout.Alignment.LEADING)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblAmp, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnPMdelay, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnPMamp, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboBoxAmp, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboBoxDelay, 0, 1, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(btnMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblA, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblB, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblC, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 46, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBack)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(94, 94, 94)
+                                .addComponent(btnGenerate))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblEquation)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblLowerLimit)
+                                            .addComponent(lblUpperLimit))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(txtLowerLimit, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(txtUpperLimit, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(64, 64, 64)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblAmp, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnPMdelay, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnPMamp, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(comboBoxAmp, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(comboBoxDelay, 0, 1, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnTransform, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblInterpol)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(comboBoxInterpol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(btnMethod, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(lblSignal)
+                                .addGap(18, 18, 18)
+                                .addComponent(comboBoxSignal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +280,7 @@ public class TransformContinuous extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblSignal)
@@ -314,28 +307,25 @@ public class TransformContinuous extends javax.swing.JFrame {
                             .addComponent(comboBoxDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPMdelay)
                             .addComponent(lblDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnMethod)
-                        .addGap(8, 8, 8)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnTransform)
-                            .addComponent(jLabel2)))
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblA)
-                            .addComponent(lblB)
-                            .addComponent(txtB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblC)
-                            .addComponent(txtC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                        .addComponent(btnBack)
-                        .addGap(18, 18, 18))))
+                            .addComponent(lblInterpol)
+                            .addComponent(comboBoxInterpol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnMethod)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnTransform)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                                .addComponent(btnBack)
+                                .addGap(17, 17, 17))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(75, 75, 75))))
         );
 
         pack();
@@ -370,23 +360,28 @@ public class TransformContinuous extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
+        boolean pass = true;
         String signal = (String) comboBoxSignal.getSelectedItem();
         double[] limits = new double[2];
         limits[0] = Double.parseDouble(txtLowerLimit.getText());
         limits[1] = Double.parseDouble(txtUpperLimit.getText());
-        double[] abc = new double[3];
-        abc[0] = Double.parseDouble(txtA.getText());
-        abc[1] = Double.parseDouble(txtB.getText());
-        abc[2] = Double.parseDouble(txtC.getText());
+        if (signal.equals("Señal 4") && limits[1]-limits[0]+1 != 14){
+            pass = false;
+        }
+        if (pass){
+            dispose();
+            DiscreteRegular frame = new DiscreteRegular(signal, limits);
+            frame.setTitle("Primer Laboratorio Señales y Sistemas");
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            frame.setIconImage(icon.getImage());
+        }else{
+            JOptionPane.showMessageDialog(null, "Los límites no encajan con el tamaño de la señal.");
+            txtLowerLimit.setText("1");
+            txtUpperLimit.setText("14");
+        }
 
-        
-        dispose();
-        ContinuousRegular frame = new ContinuousRegular(signal, limits, abc);
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMethodActionPerformed
@@ -399,40 +394,48 @@ public class TransformContinuous extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMethodActionPerformed
 
     private void btnTransformActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransformActionPerformed
+        boolean pass = true;
         String signal = (String) comboBoxSignal.getSelectedItem();
         double[] limits = new double[2];
         limits[0] = Double.parseDouble(txtLowerLimit.getText());
         limits[1] = Double.parseDouble(txtUpperLimit.getText());
-        double[] abc = new double[3];
-        abc[0] = Double.parseDouble(txtA.getText());
-        abc[1] = Double.parseDouble(txtB.getText());
-        abc[2] = Double.parseDouble(txtC.getText());
-        double[] at0 = new double[2];
-        String astr = (String) comboBoxAmp.getSelectedItem();
-        switch (astr){
-            case "1/2" -> at0[0] = 1.0/2;
-            case "1/3" -> at0[0] = 1.0/3;
-            case "1/4" -> at0[0] = 1.0/4;
-            case "1/5" -> at0[0] = 1.0/5;
-            default -> at0[0] = Double.parseDouble(astr);
+        double[] mn0 = new double[2];
+        String mstr = (String) comboBoxAmp.getSelectedItem();
+        switch (mstr){
+            case "1/2" -> mn0[0] = 1.0/2;
+            case "1/3" -> mn0[0] = 1.0/3;
+            case "1/4" -> mn0[0] = 1.0/4;
+            case "1/5" -> mn0[0] = 1.0/5;
+            default -> mn0[0] = Double.parseDouble(mstr);
         }
         if (btnPMamp.getText().equals("-")){
-            at0[0] *= -1;
+            mn0[0] *= -1;
         }
         String delaystr = (String) comboBoxDelay.getSelectedItem();
-        at0[1] = Double.parseDouble(delaystr);
+        mn0[1] = Double.parseDouble(delaystr);
         if (btnPMdelay.getText().equals("-")){
-            at0[1] *= -1;
+            mn0[1] *= -1;
         }
         String method = btnMethod.getText();
+        String interpol = (String) comboBoxInterpol.getSelectedItem();
         
-        dispose();
-        ContinuousTransformed frame = new ContinuousTransformed(signal, limits, abc, at0, method);
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
+        if (signal.equals("Señal 4") && limits[1]-limits[0]+1 != 14){
+            pass = false;
+        }
+        if (pass){
+            dispose();
+            DiscreteTransformed frame = new DiscreteTransformed(signal, limits, interpol, mn0, method);
+            frame.setTitle("Primer Laboratorio Señales y Sistemas");
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            frame.setIconImage(icon.getImage());
+        }else{
+            JOptionPane.showMessageDialog(null, "Los límites no encajan con el tamaño de la señal.");
+            txtLowerLimit.setText("1");
+            txtUpperLimit.setText("14");
+        }
+        
     }//GEN-LAST:event_btnTransformActionPerformed
 
 
@@ -446,22 +449,18 @@ public class TransformContinuous extends javax.swing.JFrame {
     private javax.swing.JButton btnTransform;
     private javax.swing.JComboBox<String> comboBoxAmp;
     private javax.swing.JComboBox<String> comboBoxDelay;
+    private javax.swing.JComboBox<String> comboBoxInterpol;
     private javax.swing.JComboBox<String> comboBoxSignal;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel lblA;
     private javax.swing.JLabel lblAmp;
-    private javax.swing.JLabel lblB;
-    private javax.swing.JLabel lblC;
     private javax.swing.JLabel lblDelay;
     private javax.swing.JLabel lblEquation;
     private javax.swing.JLabel lblImage;
+    private javax.swing.JLabel lblInterpol;
     private javax.swing.JLabel lblLowerLimit;
     private javax.swing.JLabel lblSignal;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblUpperLimit;
-    private javax.swing.JTextField txtA;
-    private javax.swing.JTextField txtB;
-    private javax.swing.JTextField txtC;
     private javax.swing.JTextField txtLowerLimit;
     private javax.swing.JTextField txtUpperLimit;
     // End of variables declaration//GEN-END:variables
