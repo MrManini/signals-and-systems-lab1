@@ -367,6 +367,7 @@ public class TransformContinuous extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
@@ -387,6 +388,7 @@ public class TransformContinuous extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMethodActionPerformed
@@ -433,6 +435,7 @@ public class TransformContinuous extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnTransformActionPerformed
 
 

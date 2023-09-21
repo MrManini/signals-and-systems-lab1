@@ -11,24 +11,18 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import javax.swing.ImageIcon;
-
-
+import org.jfree.chart.plot.CombinedDomainXYPlot;
+import org.jfree.chart.plot.PlotOrientation;
 
 /**
  *
  * @author kevin
  */
-public class ContinuousRegular extends javax.swing.JFrame {
+public class ContinuousBeforeSum extends javax.swing.JFrame {
 
-    private static String type;
-    private static double[] limits;
-    private static double[]  abc;
     
-    public ContinuousRegular(String type, double[] limits, double[] abc) {
+    public ContinuousBeforeSum() {
         initComponents();
-        ContinuousRegular.type = type;
-        ContinuousRegular.limits = limits;
-        ContinuousRegular.abc = abc;
         
         JFreeChart chart = showPlot();
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -41,69 +35,103 @@ public class ContinuousRegular extends javax.swing.JFrame {
     
     private JFreeChart showPlot(){
         // Create the JFreeChart
+        XYSeriesCollection[] datasets = allDatasets();
         JFreeChart chart = ChartFactory.createXYLineChart(
-                type.toUpperCase(),  // chart title
+                "",  // chart title
                 "t",            // x-axis label
                 "x",            // y-axis label
-                createFunctionDataset()
+                datasets[0],
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+        
+        CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot();
+        Color[] lineColors = new Color[3];
+        lineColors[0] = Color.decode("#7F00FF");
+        lineColors[1] = Color.decode("#9F10C0");
+        lineColors[2] = Color.decode("#BF2080");
+        
+        for (int i = 0; i < datasets.length; i++) {
+            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
+            renderer.setSeriesPaint(0, lineColors[i]);
+            renderer.setSeriesStroke(0, new BasicStroke(3f));
+            XYPlot subplot = new XYPlot(datasets[i], new org.jfree.chart.axis.NumberAxis("n"),
+                    new org.jfree.chart.axis.NumberAxis("x"), renderer);
+            combinedPlot.add(subplot);
+        }
+        // Set the domain and range axes of the main plot to invisible
+        chart.getXYPlot().getDomainAxis().setVisible(false);
+        chart.getXYPlot().getRangeAxis().setVisible(false);
+
+        String title = "Transformaciones de x(t): x(3-t/3) y x(t/2-2)";
+        
+        
+        //Full plot
+        chart.getXYPlot().setParent(combinedPlot);
+        chart = new JFreeChart(
+                title,
+                JFreeChart.DEFAULT_TITLE_FONT,
+                combinedPlot,
+                true
         );
         
         Color pink = Color.decode("#fceaf1");
-        Color lineColor;
-        switch (type){
-            case "Señal 1" -> lineColor = Color.MAGENTA;
-            case "Señal 2" -> lineColor = Color.decode("#7F00FF");
-            case "Señal 3" -> lineColor = Color.decode("#0099FF");
-            default -> lineColor = Color.MAGENTA;
-        }
         
         chart.setBackgroundPaint(pink);
         chart.getLegend().setBackgroundPaint(pink);
         
         XYPlot plot = (XYPlot) chart.getPlot();
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        
         plot.setBackgroundPaint(Color.white);
         plot.setDomainGridlinesVisible(true);
         plot.setRangeGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.lightGray);
         plot.setRangeGridlinePaint(Color.lightGray);
-        
-        
-        renderer.setSeriesPaint(0, lineColor);
-        renderer.setSeriesShapesVisible(0, false);
-        renderer.setSeriesStroke(0, new BasicStroke(3f));
-        
-        plot.setRenderer(renderer);
 
-        return chart;   
+        return chart;
     }
-    
-    
-    private static XYSeriesCollection createFunctionDataset() {
+    private static XYSeriesCollection[] allDatasets(){
+        XYSeriesCollection dataset1 = originalDataset();
+        XYSeriesCollection dataset2 = transformedDataset(-1.0/3, 3, "x(3-t/3)");
+        XYSeriesCollection dataset3 = transformedDataset(1.0/2, -2, "x(t/2-2)");
+        
+        XYSeriesCollection[] datasets = {dataset1, dataset2, dataset3};
+        
+        return datasets;
+    }
+    private static XYSeriesCollection originalDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries series = new XYSeries(type);
+        XYSeries series = new XYSeries("x(t)");
         // Generate data points for the function
-        // abc = {a, b, c} a = abc[0]
-        double[] t = arrayer(limits[0],limits[1],0.01);
+        double[] t = arrayer(-1,1,0.01);
         for (int i = 0; i < t.length; i++) {
             double x;
-            switch (type) {
-                case "Señal 1" -> x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2];
-                case "Señal 2" -> {
-                    if (t[i] <= 0){
-                        x = t[i] + 1;
-                    }else{
-                        x = -t[i] + 1;
-                    }
+                if (t[i] <= 0){
+                    x = t[i] + 1;
+                }else{
+                    x = -t[i] + 1;
                 }
-                case "Señal 3" -> x = Math.exp(-Math.abs(t[i]));
-                default -> x = 0;
-            }
             series.add(t[i], x);
         }   
         dataset.addSeries(series);
         return dataset;
-    }   
+    }
+    private static XYSeriesCollection transformedDataset(double amp, double delay, String title){
+        XYSeriesCollection originalData = originalDataset();
+        XYSeries originalSeries = originalData.getSeries(0);
+        XYSeriesCollection dataset = new XYSeriesCollection();
+            XYSeries series = new XYSeries(title);
+        for (int i = 0; i < originalSeries.getItemCount(); i++) {
+            double originalT = originalSeries.getX(i).doubleValue();
+            double newT = (originalT - delay)/amp;
+            double originalX = originalSeries.getY(i).doubleValue();
+            series.add(newT, originalX);
+        }
+        dataset.addSeries(series);
+        return dataset;
+    }
     
     private static double[] arrayer(double start, double end, double step ){
         //t = 0:Delta:100
@@ -159,23 +187,13 @@ public class ContinuousRegular extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformContinuous frame = new TransformContinuous();
+        SignalSum frame = new SignalSum();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
-
-    //public static void main(String args[]) {
-        /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(new Runnable() {
-            //public void run() {
-                //new ContinuousRegular(type, limits, abc).setVisible(true);
-            //}
-        //});
-    //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel1;

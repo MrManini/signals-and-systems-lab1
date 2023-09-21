@@ -11,6 +11,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CombinedDomainXYPlot;
@@ -22,21 +24,17 @@ import org.jfree.data.xy.DefaultXYDataset;
  *
  * @author kevin
  */
-public class DiscreteTransformed extends javax.swing.JFrame {
+public class DiscreteAfterSum extends javax.swing.JFrame {
 
     private static String type;
     private static double[] limits;
-    private static double[] mn0;
-    private static String method;
     private static String interpol;
     
-    public DiscreteTransformed(String type, double[] limits, String interpol, double[] mn0, String method) {
+    public DiscreteAfterSum(String type, double[] limits, String interpol) {
         initComponents();
-        DiscreteTransformed.type = type;
-        DiscreteTransformed.limits = limits;
-        DiscreteTransformed.mn0 = mn0;
-        DiscreteTransformed.method = method;
-        DiscreteTransformed.interpol = interpol;
+        DiscreteAfterSum.type = type;
+        DiscreteAfterSum.limits = limits;
+        DiscreteAfterSum.interpol = interpol;
         
         JFreeChart chart = showPlot();
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -48,9 +46,30 @@ public class DiscreteTransformed extends javax.swing.JFrame {
     }
     private JFreeChart showPlot(){
         // Create the JFreeChart
-        XYSeriesCollection[] datasets = allDatasets();
-        XYPlot[] subplots = new XYPlot[3];
-        CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot();
+        XYSeriesCollection totalDataset = sumOfDatasets();
+        JFreeChart chart = ChartFactory.createScatterPlot(
+                "Señal sumada completa x[3 - n/3] + x[n/4 - 4]",  // chart title
+                "n",            // x-axis label
+                "x",            // y-axis label
+                totalDataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+        
+        Color pink = Color.decode("#fceaf1");
+        
+        chart.setBackgroundPaint(pink);
+        chart.getLegend().setBackgroundPaint(pink);
+        
+        XYPlot plot = (XYPlot) chart.getPlot();
+        XYItemRenderer renderer = plot.getRenderer();
+        plot.setBackgroundPaint(Color.white);
+        plot.setDomainGridlinesVisible(true);
+        plot.setRangeGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.lightGray);
+        plot.setRangeGridlinePaint(Color.lightGray);
         
         Color[] lineColors = new Color[3];
         switch (type){
@@ -60,112 +79,115 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                 lineColors[2] = Color.decode("#FF0074");
             }
             case "Señal 5" ->{
-                lineColors[0] = Color.decode("#7F00FF");
-                lineColors[1] = Color.decode("#9F10C0");
-                lineColors[2] = Color.decode("#BF2080");
-            }
-            case "Señal 6" ->{
-                lineColors[0] = Color.decode("#0099FF");
-                lineColors[1] = Color.decode("#00BBFF");
-                lineColors[2] = Color.decode("#00CC88");
+                lineColors[0] = Color.decode("#1d47ab");
+                lineColors[1] = Color.decode("#1d9aab");
+                lineColors[2] = Color.decode("#1dab85");
             }
         }
         
-        
-        for (int i = 0; i < 3; i++) {
-            // Create the scatter plot for each subplot
-            JFreeChart chart = ChartFactory.createScatterPlot(
-                    "Subplot " + (i + 1),
-                    "n",
-                    "x",
-                    datasets[i],
-                    PlotOrientation.VERTICAL,
-                    true,
-                    true,
-                    false
-            );
+        Point2D.Float point1 = new Point2D.Float(0, 0);
+        Point2D.Float point2 = new Point2D.Float(600, 0);
+        float[] fractions = {0f, 0.5f, 1f};
+        Color[] colors = lineColors;
+        MultipleGradientPaint gradientPaint = new LinearGradientPaint(point1, point2, fractions, colors);
 
-            // Customize the plot and renderer for scatter points (optional)
-            XYPlot plot = (XYPlot) chart.getPlot();
-            XYItemRenderer renderer = plot.getRenderer();
-
-            // Customize the renderer for scatter points (e.g., change the shape and color of points)
-            Shape pointShape = new Ellipse2D.Double(-3, -3, 6, 6); // Example shape
-            renderer.setSeriesShape(0, pointShape);
-            renderer.setSeriesPaint(0, lineColors[i]);
-
-            // Add the subplot to the CombinedDomainXYPlot
-            subplots[i] = plot;
-            combinedPlot.add(subplots[i]);
-            
-            plot.setBackgroundPaint(Color.white);
-            plot.setDomainGridlinesVisible(true);
-            plot.setRangeGridlinesVisible(true);
-            plot.setDomainGridlinePaint(Color.lightGray);
-            plot.setRangeGridlinePaint(Color.lightGray);
-
-            if (type.equals("Señal 4")){
-                NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-                domainAxis.setAutoRangeIncludesZero(false); // Disable automatic zero inclusion
-                domainAxis.setRange(domainAxis.getLowerBound()-0.5, domainAxis.getUpperBound());
-            }
-
-            if (type.equals("Señal 6")){
-                NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-                rangeAxis.setAutoRangeIncludesZero(false); // Disable automatic zero inclusion
-                rangeAxis.setRange(rangeAxis.getLowerBound()-0.5, rangeAxis.getUpperBound());
-            }
-            
-            DefaultXYDataset lineDataset = createLineDataset(datasets[i]);
-            XYItemRenderer lineRenderer = new XYLineAndShapeRenderer(true, false);
-            lineRenderer.setSeriesPaint(0, lineColors[i]);
-            subplots[i].setDataset(1, lineDataset);
-            subplots[i].setRenderer(1, lineRenderer);
-            lineRenderer.setSeriesVisibleInLegend(0, false);
-            
-        }
-        
-        int mnValueAsInt = (int) (Math.abs(mn0[0])* 100); // Convert to an integer (e.g., 0.5 -> 50)
-        String ampName;
-
-        ampName = switch (mnValueAsInt) {
-            case 50 -> "1/2";
-            case 33 -> "1/3";
-            case 25 -> "1/4";
-            case 20 -> "1/5";
-            default -> String.valueOf(mn0[0]);
-        };
-        if (mn0[0] < 0) ampName = "-" + ampName;
-
-        String delayName = String.valueOf(Math.abs(mn0[1]));
-        String delaySign = "+";
-        if (mn0[1] < 0) delaySign = "-";
-        String title = "Transformación de "+type+": x["+ampName+"n "+delaySign+" "+delayName+"]";
-        
-        //Full plot
-        JFreeChart finalChart = new JFreeChart(
-                title,
-                JFreeChart.DEFAULT_TITLE_FONT,
-                combinedPlot,
-                true
+        // Create a custom stroke with a gradient paint and make the line thicker
+        Stroke customStroke = new BasicStroke(
+                4.0f, // Adjust the line thickness as needed
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
         );
         
-        Color pink = Color.decode("#fceaf1");
-        finalChart.setBackgroundPaint(pink);
-        finalChart.getLegend().setBackgroundPaint(pink);
+        Shape pointShape = new Ellipse2D.Double(-4, -4, 8, 8); // Example shape
+        renderer.setSeriesShape(0, pointShape);
+        
+        // Create a gradient paint for the points with multiple color stops
+        LinearGradientPaint gradientDotPaint = new LinearGradientPaint(point1, point2, fractions, colors);
 
-        return finalChart;
+        // Set the gradient paint as the fill paint for the renderer
+        renderer.setSeriesPaint(0, gradientDotPaint);
+        
+        plot.setRenderer(0,renderer);  
+        
+        // Create a dataset for lines connecting the data points to the x-axis
+        DefaultXYDataset lineDataset = createLineDataset(totalDataset);
+
+        // Create a renderer for the lines
+        XYItemRenderer lineRenderer = new XYLineAndShapeRenderer(true, false);
+        lineRenderer.setSeriesPaint(0, gradientPaint); // Set the gradient paint as the line color
+        lineRenderer.setSeriesStroke(0, customStroke);  // Set the custom stroke
+        lineRenderer.setSeriesVisibleInLegend(0, false);
+        
+        plot.setDataset(1, lineDataset); // Add the line dataset to the plot
+        plot.setRenderer(1, lineRenderer); // Set the line renderer for the new dataset
+        
+        return chart;   
     }
     
-    private static XYSeriesCollection[] allDatasets(){
-        XYSeriesCollection dataset1 = originalDataset();
-        XYSeriesCollection dataset2 = methodDataset(dataset1, method, interpol);
-        XYSeriesCollection dataset3 = finalDataset();
+    private static XYSeriesCollection sumOfDatasets(){
+        XYSeriesCollection dataset1 = finalDataset(3, -1.0/3, "x[3 - n/3]");
+        XYSeriesCollection dataset2 = finalDataset(-4, 1.0/4, "x[n/4 - 4]");
+        XYSeriesCollection totalDataset = new XYSeriesCollection();
         
-        XYSeriesCollection[] datasets = {dataset1, dataset2, dataset3};
+        XYSeries series1 = dataset1.getSeries(0);
+        XYSeries series2 = dataset2.getSeries(0);
+        XYSeries totalSeries = new XYSeries("Suma de las señales");
         
-        return datasets;
+        ArrayList nValues = new ArrayList<Double>();
+        double lowestNumber = Double.MAX_VALUE;
+        double highestNumber = Double.MIN_VALUE;
+        for (int i = 0; i < series1.getItemCount(); i++){
+            double n1 = series1.getX(i).doubleValue();
+            double x1 = series1.getY(i).doubleValue();
+            double x2 = findYValueForX(series2, n1);
+            if (!Double.isNaN(x2)){
+                totalSeries.add(n1, x1+x2);
+            }else{
+                totalSeries.add(n1, x1);
+            }
+            nValues.add(n1);
+            if (n1 < lowestNumber) lowestNumber = n1;
+            if (n1 > highestNumber) highestNumber = n1;
+        }
+        
+        for (int i = 0; i < series2.getItemCount(); i++){
+            double n2 = series2.getX(i).doubleValue();
+            if (!nValues.contains(n2)){
+                double x2 = series2.getY(i).doubleValue();
+                double x1 = findYValueForX(series1, n2);
+                if (!Double.isNaN(x1)){
+                    totalSeries.add(n2, x1+x2);
+                }else{
+                    totalSeries.add(n2, x2);
+                }
+                nValues.add(n2);
+                if (n2 < lowestNumber) lowestNumber = n2;
+                if (n2 > highestNumber) highestNumber = n2;
+            }
+        }
+        
+        double[] array = arrayer(lowestNumber, highestNumber, 1);
+        for (int i = 0; i < array.length; i++){
+            if (!nValues.contains(array[i])){
+                totalSeries.add(array[i],0);
+            }
+        }
+        
+        
+        totalDataset.addSeries(totalSeries);
+        return totalDataset;
     }
+    
+    private static double findYValueForX(XYSeries series, double x) {
+        for (int itemIndex = 0; itemIndex < series.getItemCount(); itemIndex++) {
+            double xValue = series.getX(itemIndex).doubleValue();
+            if (x == xValue) {
+                return series.getY(itemIndex).doubleValue();
+            }
+        }
+        return Double.NaN; // Return NaN if the x-value is not found in the series
+    }
+    
     private static XYSeriesCollection originalDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
         XYSeries series = new XYSeries(type);
@@ -185,13 +207,6 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                         x = 9.0/t[i];
                     }
                 }
-                case "Señal 6" -> {
-                    if (t[i] <= 0){
-                        x = Math.pow(2.0,t[i]);
-                    }else{
-                        x = Math.pow(1.5,t[i]);
-                    }
-                }
                 default -> x = 0;
             }
             series.add(t[i], x);
@@ -200,7 +215,7 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         return dataset;
     }  
     private static XYSeriesCollection methodDataset(XYSeriesCollection originalData, 
-            String method, String interpol){
+            String method, String interpol, double delay, double amp){
         XYSeries originalSeries = originalData.getSeries(0);
         XYSeriesCollection dataset = new XYSeriesCollection();
         if (method.equals("Método 1")){
@@ -208,7 +223,7 @@ public class DiscreteTransformed extends javax.swing.JFrame {
             XYSeries series = new XYSeries(type+" desplazada");
             for (int i = 0; i < originalSeries.getItemCount(); i++) {
                 double originalN = originalSeries.getX(i).doubleValue();
-                double newN = originalN - mn0[1];
+                double newN = originalN - delay;
                 double originalX = originalSeries.getY(i).doubleValue();
                 series.add(newN, originalX);
             }
@@ -216,12 +231,12 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         }else{
             //Primero escalar, luego desplazar
             XYSeries series = new XYSeries(type+" escalada");
-            if (Math.abs(mn0[0]) > 1){
+            if (Math.abs(amp) > 1){
                 //Diezmación
                 for (int i = 0; i < originalSeries.getItemCount(); i++) {
                     double originalN = originalSeries.getX(i).doubleValue();
-                    if (originalN % mn0[0] == 0){
-                        double newN = originalN / mn0[0];
+                    if (originalN % amp == 0){
+                        double newN = originalN / amp;
                         double originalX = originalSeries.getY(i).doubleValue();
                         series.add(newN, originalX);
                     }
@@ -233,54 +248,54 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                     case "Ceros" -> {
                         for (int i = 0; i < count - 1; i++) {
                             double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
+                            double newN = originalN / amp;
                             double originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             int k = 1;
-                            if (mn0[0] < 0) k = -1;
-                            for (int j = 1; j < 1/Math.abs(mn0[0]); j++){
+                            if (amp < 0) k = -1;
+                            for (int j = 1; j < 1/Math.abs(amp); j++){
                                 series.add(newN+j*k,0);
                             }
                         }
                         double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
+                        double newN = originalN / amp;
                         double originalX = originalSeries.getY(count-1).doubleValue();
                         series.add(newN, originalX);
                     }
                     case "Escalón" -> {
                         for (int i = 0; i < count; i++) {
                             double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
+                            double newN = originalN / amp;
                             double originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             int k = 1;
-                            if (mn0[0] < 0) k = -1;
-                            for (int j = 1; j < 1/Math.abs(mn0[0]); j++){
+                            if (amp < 0) k = -1;
+                            for (int j = 1; j < 1/Math.abs(amp); j++){
                                 series.add(newN+j*k,originalX);
                             }
                         }
                         /*double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
+                        double newN = originalN / amp;
                         double originalX = originalSeries.getY(count-1).doubleValue();
                         series.add(newN, originalX);*/
                     }
                     case "Lineal" -> {
                         for (int i = 0; i < count - 1; i++) {
                             double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
+                            double newN = originalN / amp;
                             double originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             double nextN = originalSeries.getX(i+1).doubleValue();
-                            double newNextN = nextN/ mn0[0];
+                            double newNextN = nextN/ amp;
                             double nextX = originalSeries.getY(i+1).doubleValue();
-                            int size = (int) Math.abs(1/mn0[0]);
+                            int size = (int) Math.abs(1/amp);
                             double[][] values = linearInterpolation(newN, originalX, newNextN, nextX, size);
                             for (int j = 0; j < size-1; j++){
                                 series.add(values[0][j], values[1][j]);
                             }
                         }
                         double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
+                        double newN = originalN / amp;
                         double originalX = originalSeries.getY(count-1).doubleValue();
                         series.add(newN, originalX);
                     }
@@ -290,11 +305,11 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         }
         return dataset;
     }
-    private static XYSeriesCollection finalDataset(){
-        XYSeriesCollection delayedData = methodDataset(originalDataset(),"Método 1","");
-        XYSeriesCollection finalData = methodDataset(delayedData, "Método 2", interpol);
+    private static XYSeriesCollection finalDataset(double delay, double amp, String title){
+        XYSeriesCollection delayedData = methodDataset(originalDataset(),"Método 1","", delay, amp);
+        XYSeriesCollection finalData = methodDataset(delayedData, "Método 2", interpol, delay, amp);
         XYSeries series = finalData.getSeries(0);
-        series.setKey(type+" transformada");
+        series.setKey(title);
         
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
@@ -404,7 +419,7 @@ public class DiscreteTransformed extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformDiscrete frame = new TransformDiscrete();
+        SignalSum frame = new SignalSum();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

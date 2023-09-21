@@ -272,6 +272,7 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

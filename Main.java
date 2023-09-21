@@ -129,13 +129,19 @@ public class Main extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
         dispose();
     }//GEN-LAST:event_btnDiscreteActionPerformed
 
-    
-    
     private void btnSignalSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignalSumActionPerformed
-        // TODO add your handling code here:
+        SignalSum frame = new SignalSum();
+        frame.setTitle("Primer Laboratorio Señales y Sistemas");
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
+        dispose();
     }//GEN-LAST:event_btnSignalSumActionPerformed
 
     private void btnContinuousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuousActionPerformed
@@ -145,6 +151,7 @@ public class Main extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
         dispose();
     }//GEN-LAST:event_btnContinuousActionPerformed
 
@@ -165,6 +172,7 @@ public class Main extends javax.swing.JFrame {
                 frame.setVisible(true);
                 ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
                 frame.setIconImage(icon.getImage());
+                frame.setResizable(false);
             }
         });
     }

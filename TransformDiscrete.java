@@ -1,5 +1,6 @@
 package tello;
 
+
 import java.awt.event.ItemEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -357,6 +358,7 @@ public class TransformDiscrete extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
@@ -376,8 +378,13 @@ public class TransformDiscrete extends javax.swing.JFrame {
             frame.setVisible(true);
             ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
             frame.setIconImage(icon.getImage());
+            frame.setResizable(false);
         }else{
-            JOptionPane.showMessageDialog(null, "Los límites no encajan con el tamaño de la señal.");
+            JOptionPane.showMessageDialog(null, 
+                    "Los límites no encajan con el tamaño de la señal.",
+                    "Advertencia: límites erróneos",
+                    JOptionPane.ERROR_MESSAGE
+                );
             txtLowerLimit.setText("1");
             txtUpperLimit.setText("14");
         }
@@ -430,8 +437,13 @@ public class TransformDiscrete extends javax.swing.JFrame {
             frame.setVisible(true);
             ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
             frame.setIconImage(icon.getImage());
+            frame.setResizable(false);
         }else{
-            JOptionPane.showMessageDialog(null, "Los límites no encajan con el tamaño de la señal.");
+            JOptionPane.showMessageDialog(null, 
+                    "Los límites no encajan con el tamaño de la señal.",
+                    "Error: límites erróneos",
+                    JOptionPane.ERROR_MESSAGE
+                );
             txtLowerLimit.setText("1");
             txtUpperLimit.setText("14");
         }

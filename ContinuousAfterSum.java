@@ -10,7 +10,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import javax.swing.ImageIcon;
+import org.jfree.chart.plot.PlotOrientation;
 
 
 
@@ -18,17 +20,11 @@ import javax.swing.ImageIcon;
  *
  * @author kevin
  */
-public class ContinuousRegular extends javax.swing.JFrame {
+public class ContinuousAfterSum extends javax.swing.JFrame {
 
-    private static String type;
-    private static double[] limits;
-    private static double[]  abc;
     
-    public ContinuousRegular(String type, double[] limits, double[] abc) {
+    public ContinuousAfterSum() {
         initComponents();
-        ContinuousRegular.type = type;
-        ContinuousRegular.limits = limits;
-        ContinuousRegular.abc = abc;
         
         JFreeChart chart = showPlot();
         ChartPanel chartPanel = new ChartPanel(chart);
@@ -42,20 +38,18 @@ public class ContinuousRegular extends javax.swing.JFrame {
     private JFreeChart showPlot(){
         // Create the JFreeChart
         JFreeChart chart = ChartFactory.createXYLineChart(
-                type.toUpperCase(),  // chart title
+                "Señal sumada completa x(3 - t/3) + x(t/2 - 2)",  // chart title
                 "t",            // x-axis label
                 "x",            // y-axis label
-                createFunctionDataset()
+                fullDataset(),
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
         );
         
         Color pink = Color.decode("#fceaf1");
-        Color lineColor;
-        switch (type){
-            case "Señal 1" -> lineColor = Color.MAGENTA;
-            case "Señal 2" -> lineColor = Color.decode("#7F00FF");
-            case "Señal 3" -> lineColor = Color.decode("#0099FF");
-            default -> lineColor = Color.MAGENTA;
-        }
+
         
         chart.setBackgroundPaint(pink);
         chart.getLegend().setBackgroundPaint(pink);
@@ -69,9 +63,21 @@ public class ContinuousRegular extends javax.swing.JFrame {
         plot.setRangeGridlinePaint(Color.lightGray);
         
         
-        renderer.setSeriesPaint(0, lineColor);
+        Point2D.Float point1 = new Point2D.Float(0, 0);
+        Point2D.Float point2 = new Point2D.Float(600, 0);
+        float[] fractions = {0f, 0.5f, 1f};
+        Color[] colors = {Color.decode("#7F00FF"), Color.decode("#9F10C0"), Color.decode("#BF2080")};
+        MultipleGradientPaint gradientPaint = new LinearGradientPaint(point1, point2, fractions, colors);
+
+        // Create a custom stroke with a gradient paint and make the line thicker
+        Stroke customStroke = new BasicStroke(
+                4.0f, // Adjust the line thickness as needed
+                BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND
+        );
+        renderer.setSeriesPaint(0, gradientPaint); // Set the gradient paint as the line color
+        renderer.setSeriesStroke(0, customStroke);  // Set the custom stroke
         renderer.setSeriesShapesVisible(0, false);
-        renderer.setSeriesStroke(0, new BasicStroke(3f));
         
         plot.setRenderer(renderer);
 
@@ -79,31 +85,46 @@ public class ContinuousRegular extends javax.swing.JFrame {
     }
     
     
-    private static XYSeriesCollection createFunctionDataset() {
+    private static XYSeriesCollection originalDataset() {
         XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries series = new XYSeries(type);
+        XYSeries series = new XYSeries("x(t)");
         // Generate data points for the function
-        // abc = {a, b, c} a = abc[0]
-        double[] t = arrayer(limits[0],limits[1],0.01);
+        double[] t = arrayer(-1,1,0.01);
         for (int i = 0; i < t.length; i++) {
             double x;
-            switch (type) {
-                case "Señal 1" -> x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2];
-                case "Señal 2" -> {
-                    if (t[i] <= 0){
-                        x = t[i] + 1;
-                    }else{
-                        x = -t[i] + 1;
-                    }
+                if (t[i] <= 0){
+                    x = t[i] + 1;
+                }else{
+                    x = -t[i] + 1;
                 }
-                case "Señal 3" -> x = Math.exp(-Math.abs(t[i]));
-                default -> x = 0;
-            }
             series.add(t[i], x);
         }   
         dataset.addSeries(series);
         return dataset;
-    }   
+    }
+    
+    private static XYSeriesCollection fullDataset(){
+        XYSeriesCollection originalData = originalDataset();
+        XYSeries originalSeries = originalData.getSeries(0);
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        XYSeries series = new XYSeries("Suma de las señales");
+        double delay;
+        double amp;
+        for (int i = 0; i < originalSeries.getItemCount(); i++) {
+            delay = 3;
+            amp = -1.0/3;
+            double originalT = originalSeries.getX(i).doubleValue();            
+            double originalX = originalSeries.getY(i).doubleValue();
+            double newT = (originalT - delay)/amp;
+            series.add(newT, originalX);
+            delay = -2;
+            amp = 1.0/2;
+            newT = (originalT - delay)/amp;
+            series.add(newT, originalX);
+        }
+        dataset.addSeries(series);
+        return dataset;
+    }
     
     private static double[] arrayer(double start, double end, double step ){
         //t = 0:Delta:100
@@ -159,7 +180,7 @@ public class ContinuousRegular extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformContinuous frame = new TransformContinuous();
+        SignalSum frame = new SignalSum();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -168,14 +189,6 @@ public class ContinuousRegular extends javax.swing.JFrame {
         frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    //public static void main(String args[]) {
-        /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(new Runnable() {
-            //public void run() {
-                //new ContinuousRegular(type, limits, abc).setVisible(true);
-            //}
-        //});
-    //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanel1;

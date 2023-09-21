@@ -12,9 +12,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import javax.swing.ImageIcon;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.chart.ui.RectangleInsets;
 import org.jfree.data.xy.DefaultXYDataset;
 
 
@@ -94,7 +94,19 @@ public class DiscreteRegular extends javax.swing.JFrame {
         plot.setRangeGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.lightGray);
         plot.setRangeGridlinePaint(Color.lightGray);
-
+        
+        if (type.equals("Señal 4")){
+            NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
+            domainAxis.setAutoRangeIncludesZero(false); // Disable automatic zero inclusion
+            domainAxis.setRange(domainAxis.getLowerBound()-0.5, domainAxis.getUpperBound());
+        }
+        
+        if (type.equals("Señal 6")){
+            NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+            rangeAxis.setAutoRangeIncludesZero(false); // Disable automatic zero inclusion
+            rangeAxis.setRange(rangeAxis.getLowerBound()-0.5, rangeAxis.getUpperBound());
+        }
+        
         return chart;   
     }
     
@@ -219,6 +231,7 @@ public class DiscreteRegular extends javax.swing.JFrame {
         frame.setVisible(true);
         ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
         frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     //public static void main(String args[]) {
