@@ -61,21 +61,21 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         CombinedDomainXYPlot combinedPlot = new CombinedDomainXYPlot();
         Color[] lineColors = new Color[3];
         switch (type){
-            case "Señal 1" ->{
+            case "Señal 1":
                 lineColors[0] = Color.decode("#FF00FF");
                 lineColors[1] = Color.decode("#9908FF");
                 lineColors[2] = Color.decode("#FF0074");
-            }
-            case "Señal 2" ->{
+                break;
+            case "Señal 2":
                 lineColors[0] = Color.decode("#7F00FF");
                 lineColors[1] = Color.decode("#9F10C0");
                 lineColors[2] = Color.decode("#BF2080");
-            }
-            case "Señal 3" ->{
+                break;
+            case "Señal 3":
                 lineColors[0] = Color.decode("#0099FF");
                 lineColors[1] = Color.decode("#00BBFF");
                 lineColors[2] = Color.decode("#00CC88");
-            }
+                break;
         }
         
 
@@ -95,13 +95,13 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         int mnValueAsInt = (int) (Math.abs(at0[0])* 100); // Convert to an integer (e.g., 0.5 -> 50)
         String ampName;
 
-        ampName = switch (mnValueAsInt) {
-            case 50 -> "1/2";
-            case 33 -> "1/3";
-            case 25 -> "1/4";
-            case 20 -> "1/5";
-            default -> String.valueOf(at0[0]);
-        };
+        switch (mnValueAsInt) {
+            case 50: ampName = "1/2"; break;
+            case 33: ampName = "1/3"; break;
+            case 25: ampName = "1/4"; break;
+            case 20: ampName = "1/5"; break;
+            default: ampName = String.valueOf(at0[0]); break;
+        }
         if (at0[0] < 0) ampName = "-" + ampName; 
         
         String delayName = String.valueOf(Math.abs(at0[1]));
@@ -152,16 +152,16 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         for (int i = 0; i < t.length; i++) {
             double x;
             switch (type) {
-                case "Señal 1" -> x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2];
-                case "Señal 2" -> {
+                case "Señal 1": x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2]; break;
+                case "Señal 2":
                     if (t[i] <= 0){
                         x = t[i] + 1;
                     }else{
                         x = -t[i] + 1;
                     }
-                }
-                case "Señal 3" -> x = Math.exp(-Math.abs(t[i]));
-                default -> x = 0;
+                    break;
+                case "Señal 3": x = Math.exp(-Math.abs(t[i])); break;
+                default: x = 0; break;
             }
             series.add(t[i], x);
         }   
@@ -229,7 +229,7 @@ public class ContinuousTransformed extends javax.swing.JFrame {
         JPanel1 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnBack.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         btnBack.setText("Volver");
@@ -266,13 +266,6 @@ public class ContinuousTransformed extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformContinuous frame = new TransformContinuous();
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

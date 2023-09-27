@@ -54,24 +54,24 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         
         Color[] lineColors = new Color[3];
         switch (type){
-            case "Señal 4" ->{
+            case "Señal 4":
                 lineColors[0] = Color.decode("#FF00FF");
                 lineColors[1] = Color.decode("#9908FF");
                 lineColors[2] = Color.decode("#FF0074");
-            }
-            case "Señal 5" ->{
+                break;
+            case "Señal 5":
                 lineColors[0] = Color.decode("#7F00FF");
                 lineColors[1] = Color.decode("#9F10C0");
                 lineColors[2] = Color.decode("#BF2080");
-            }
-            case "Señal 6" ->{
+                break;
+            case "Señal 6":
                 lineColors[0] = Color.decode("#0099FF");
                 lineColors[1] = Color.decode("#00BBFF");
                 lineColors[2] = Color.decode("#00CC88");
-            }
+                break;
         }
         
-        
+                
         for (int i = 0; i < 3; i++) {
             // Create the scatter plot for each subplot
             JFreeChart chart = ChartFactory.createScatterPlot(
@@ -103,12 +103,7 @@ public class DiscreteTransformed extends javax.swing.JFrame {
             plot.setRangeGridlinesVisible(true);
             plot.setDomainGridlinePaint(Color.lightGray);
             plot.setRangeGridlinePaint(Color.lightGray);
-
-            if (type.equals("Señal 4")){
-                NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
-                domainAxis.setAutoRangeIncludesZero(false); // Disable automatic zero inclusion
-                domainAxis.setRange(domainAxis.getLowerBound()-0.5, domainAxis.getUpperBound());
-            }
+            
 
             if (type.equals("Señal 6")){
                 NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -128,13 +123,13 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         int mnValueAsInt = (int) (Math.abs(mn0[0])* 100); // Convert to an integer (e.g., 0.5 -> 50)
         String ampName;
 
-        ampName = switch (mnValueAsInt) {
-            case 50 -> "1/2";
-            case 33 -> "1/3";
-            case 25 -> "1/4";
-            case 20 -> "1/5";
-            default -> String.valueOf(mn0[0]);
-        };
+        switch (mnValueAsInt) {
+            case 50: ampName = "1/2"; break;
+            case 33: ampName = "1/3"; break;
+            case 25: ampName = "1/4"; break;
+            case 20: ampName = "1/5"; break;
+            default: ampName = String.valueOf(mn0[0]); break;
+        }
         if (mn0[0] < 0) ampName = "-" + ampName;
 
         String delayName = String.valueOf(Math.abs(mn0[1]));
@@ -175,8 +170,8 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         for (int i = 0; i < t.length; i++) {
             double x;
             switch (type) {
-                case "Señal 4" -> x = signal4Array[i];
-                case "Señal 5" -> {
+                case "Señal 4": x = signal4Array[i]; break;
+                case "Señal 5":
                     if (t[i] <= -4){
                         x = -2;
                     }else if (t[i] <= 2){
@@ -184,15 +179,15 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                     }else{
                         x = 9.0/t[i];
                     }
-                }
-                case "Señal 6" -> {
+                    break;
+                case "Señal 6":
                     if (t[i] <= 0){
                         x = Math.pow(2.0,t[i]);
                     }else{
                         x = Math.pow(1.5,t[i]);
                     }
-                }
-                default -> x = 0;
+                    break;
+                default: x = 0; break;
             }
             series.add(t[i], x);
         }   
@@ -229,12 +224,13 @@ public class DiscreteTransformed extends javax.swing.JFrame {
             }else{
                 //Interpolación
                 int count = originalSeries.getItemCount();
+                double originalN, newN, originalX;
                 switch (interpol){                   
-                    case "Ceros" -> {
+                    case "Ceros":
                         for (int i = 0; i < count - 1; i++) {
-                            double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
-                            double originalX = originalSeries.getY(i).doubleValue();
+                            originalN = originalSeries.getX(i).doubleValue();
+                            newN = originalN / mn0[0];
+                            originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             int k = 1;
                             if (mn0[0] < 0) k = -1;
@@ -242,16 +238,16 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                                 series.add(newN+j*k,0);
                             }
                         }
-                        double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
-                        double originalX = originalSeries.getY(count-1).doubleValue();
+                        originalN = originalSeries.getX(count-1).doubleValue();
+                        newN = originalN / mn0[0];
+                        originalX = originalSeries.getY(count-1).doubleValue();
                         series.add(newN, originalX);
-                    }
-                    case "Escalón" -> {
+                        break;
+                    case "Escalón":
                         for (int i = 0; i < count; i++) {
-                            double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
-                            double originalX = originalSeries.getY(i).doubleValue();
+                            originalN = originalSeries.getX(i).doubleValue();
+                            newN = originalN / mn0[0];
+                            originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             int k = 1;
                             if (mn0[0] < 0) k = -1;
@@ -259,16 +255,12 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                                 series.add(newN+j*k,originalX);
                             }
                         }
-                        /*double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
-                        double originalX = originalSeries.getY(count-1).doubleValue();
-                        series.add(newN, originalX);*/
-                    }
-                    case "Lineal" -> {
+                        break;
+                    case "Lineal":
                         for (int i = 0; i < count - 1; i++) {
-                            double originalN = originalSeries.getX(i).doubleValue();
-                            double newN = originalN / mn0[0];
-                            double originalX = originalSeries.getY(i).doubleValue();
+                            originalN = originalSeries.getX(i).doubleValue();
+                            newN = originalN / mn0[0];
+                            originalX = originalSeries.getY(i).doubleValue();
                             series.add(newN, originalX);
                             double nextN = originalSeries.getX(i+1).doubleValue();
                             double newNextN = nextN/ mn0[0];
@@ -279,11 +271,11 @@ public class DiscreteTransformed extends javax.swing.JFrame {
                                 series.add(values[0][j], values[1][j]);
                             }
                         }
-                        double originalN = originalSeries.getX(count-1).doubleValue();
-                        double newN = originalN / mn0[0];
-                        double originalX = originalSeries.getY(count-1).doubleValue();
+                        originalN = originalSeries.getX(count-1).doubleValue();
+                        newN = originalN / mn0[0];
+                        originalX = originalSeries.getY(count-1).doubleValue();
                         series.add(newN, originalX);
-                    }
+                        break;
                 }
             }
             dataset.addSeries(series); 
@@ -367,7 +359,8 @@ public class DiscreteTransformed extends javax.swing.JFrame {
         JPanel1 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnBack.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         btnBack.setText("Volver");
@@ -404,13 +397,6 @@ public class DiscreteTransformed extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformDiscrete frame = new TransformDiscrete();
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

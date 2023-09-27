@@ -51,10 +51,10 @@ public class ContinuousRegular extends javax.swing.JFrame {
         Color pink = Color.decode("#fceaf1");
         Color lineColor;
         switch (type){
-            case "Señal 1" -> lineColor = Color.MAGENTA;
-            case "Señal 2" -> lineColor = Color.decode("#7F00FF");
-            case "Señal 3" -> lineColor = Color.decode("#0099FF");
-            default -> lineColor = Color.MAGENTA;
+            case "Señal 1": lineColor = Color.MAGENTA; break;
+            case "Señal 2": lineColor = Color.decode("#7F00FF"); break;
+            case "Señal 3": lineColor = Color.decode("#0099FF"); break;
+            default: lineColor = Color.MAGENTA; break;
         }
         
         chart.setBackgroundPaint(pink);
@@ -88,16 +88,16 @@ public class ContinuousRegular extends javax.swing.JFrame {
         for (int i = 0; i < t.length; i++) {
             double x;
             switch (type) {
-                case "Señal 1" -> x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2];
-                case "Señal 2" -> {
+                case "Señal 1": x = abc[0]*t[i]*t[i] + abc[1]*t[i] + abc[2]; break;
+                case "Señal 2":
                     if (t[i] <= 0){
                         x = t[i] + 1;
                     }else{
                         x = -t[i] + 1;
                     }
-                }
-                case "Señal 3" -> x = Math.exp(-Math.abs(t[i]));
-                default -> x = 0;
+                    break;
+                case "Señal 3": x = Math.exp(-Math.abs(t[i])); break;
+                default: x = 0; break;
             }
             series.add(t[i], x);
         }   
@@ -122,7 +122,7 @@ public class ContinuousRegular extends javax.swing.JFrame {
         JPanel1 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnBack.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         btnBack.setText("Volver");
@@ -159,13 +159,6 @@ public class ContinuousRegular extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformContinuous frame = new TransformContinuous();
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     //public static void main(String args[]) {

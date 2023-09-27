@@ -45,30 +45,31 @@ public class TransformContinuous extends javax.swing.JFrame {
         comboBoxSignal.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedOption = (String) e.getItem();
+                ImageIcon image;
                 switch (selectedOption) {
-                    case "Ninguna" -> {
+                    case "Ninguna":
                         lblImage.setIcon(null);
                         appearSignalParameters(false, 0);
                         EverythingElse(false);
-                    }
-                    case "Señal 1" ->{                    
+                        break;
+                    case "Señal 1":                   
                         appearSignalParameters(true, 5);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/parabola.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/parabola.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
-                    }
-                    case "Señal 2" ->{
+                        break;
+                    case "Señal 2":
                         appearSignalParameters(false, 1);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/triangle.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/triangle.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
-                    }
-                    case "Señal 3" ->{
+                        break;
+                    case "Señal 3":
                         appearSignalParameters(false, 10);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/exp.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/exp.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
-                    }
+                        break;
                 }
                 
             }
@@ -365,7 +366,7 @@ public class TransformContinuous extends javax.swing.JFrame {
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
@@ -380,13 +381,11 @@ public class TransformContinuous extends javax.swing.JFrame {
         abc[1] = Double.parseDouble(txtB.getText());
         abc[2] = Double.parseDouble(txtC.getText());
 
-        
-        dispose();
         ContinuousRegular frame = new ContinuousRegular(signal, limits, abc);
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
     }//GEN-LAST:event_btnGenerateActionPerformed
@@ -412,11 +411,11 @@ public class TransformContinuous extends javax.swing.JFrame {
         double[] at0 = new double[2];
         String astr = (String) comboBoxAmp.getSelectedItem();
         switch (astr){
-            case "1/2" -> at0[0] = 1.0/2;
-            case "1/3" -> at0[0] = 1.0/3;
-            case "1/4" -> at0[0] = 1.0/4;
-            case "1/5" -> at0[0] = 1.0/5;
-            default -> at0[0] = Double.parseDouble(astr);
+            case "1/2": at0[0] = 1.0/2; break;
+            case "1/3": at0[0] = 1.0/3; break;
+            case "1/4": at0[0] = 1.0/4; break;
+            case "1/5": at0[0] = 1.0/5; break;
+            default: at0[0] = Double.parseDouble(astr); break;
         }
         if (btnPMamp.getText().equals("-")){
             at0[0] *= -1;
@@ -428,12 +427,11 @@ public class TransformContinuous extends javax.swing.JFrame {
         }
         String method = btnMethod.getText();
         
-        dispose();
         ContinuousTransformed frame = new ContinuousTransformed(signal, limits, abc, at0, method);
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
     }//GEN-LAST:event_btnTransformActionPerformed

@@ -59,10 +59,10 @@ public class DiscreteRegular extends javax.swing.JFrame {
         Color pink = Color.decode("#fceaf1");
         Color lineColor;
         switch (type){
-            case "Señal 4" -> lineColor = Color.MAGENTA;
-            case "Señal 5" -> lineColor = Color.decode("#7F00FF");
-            case "Señal 6" -> lineColor = Color.decode("#0099FF");
-            default -> lineColor = Color.MAGENTA;
+            case "Señal 4": lineColor = Color.MAGENTA; break;
+            case "Señal 5": lineColor = Color.decode("#7F00FF"); break;
+            case "Señal 6": lineColor = Color.decode("#0099FF"); break;
+            default: lineColor = Color.MAGENTA; break;
         }
         
         // Customize the plot and renderer for scatter points (optional)
@@ -119,8 +119,8 @@ public class DiscreteRegular extends javax.swing.JFrame {
         for (int i = 0; i < n.length; i++) {
             double x;
             switch (type) {
-                case "Señal 4" -> x = signal4Array[i];
-                case "Señal 5" -> {
+                case "Señal 4": x = signal4Array[i]; break;
+                case "Señal 5":
                     if (n[i] <= -4){
                         x = -2;
                     }else if (n[i] <= 2){
@@ -128,15 +128,15 @@ public class DiscreteRegular extends javax.swing.JFrame {
                     }else{
                         x = 9.0/n[i];
                     }
-                }
-                case "Señal 6" -> {
+                    break;
+                case "Señal 6":
                     if (n[i] <= 0){
                         x = Math.pow(2.0,n[i]);
                     }else{
                         x = Math.pow(1.5,n[i]);
                     }
-                }
-                default -> x = 0;
+                    break;
+                default: x = 0; break;
             }
             series.add(n[i], x);
         }   
@@ -188,7 +188,7 @@ public class DiscreteRegular extends javax.swing.JFrame {
         JPanel1 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnBack.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         btnBack.setText("Volver");
@@ -225,13 +225,6 @@ public class DiscreteRegular extends javax.swing.JFrame {
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         dispose();
-        TransformDiscrete frame = new TransformDiscrete();
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     //public static void main(String args[]) {

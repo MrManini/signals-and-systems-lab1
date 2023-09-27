@@ -122,34 +122,34 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnDiscreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscreteActionPerformed
-        TransformDiscrete frame = new TransformDiscrete();
-        frame.setTitle("Primer Laboratorio Señales y Sistemas");
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
-        frame.setIconImage(icon.getImage());
-        frame.setResizable(false);
-        dispose();
-    }//GEN-LAST:event_btnDiscreteActionPerformed
-
     private void btnSignalSumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignalSumActionPerformed
         SignalSum frame = new SignalSum();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
         dispose();
     }//GEN-LAST:event_btnSignalSumActionPerformed
+
+    private void btnDiscreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiscreteActionPerformed
+        TransformDiscrete frame = new TransformDiscrete();
+        frame.setTitle("Primer Laboratorio Señales y Sistemas");
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
+        frame.setIconImage(icon.getImage());
+        frame.setResizable(false);
+        dispose();
+    }//GEN-LAST:event_btnDiscreteActionPerformed
 
     private void btnContinuousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuousActionPerformed
         TransformContinuous frame = new TransformContinuous();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
         dispose();
@@ -170,7 +170,7 @@ public class Main extends javax.swing.JFrame {
                 frame.setTitle("Primer Laboratorio Señales y Sistemas");
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-                ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+                ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
                 frame.setIconImage(icon.getImage());
                 frame.setResizable(false);
             }

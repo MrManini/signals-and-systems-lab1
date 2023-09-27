@@ -43,30 +43,31 @@ public class TransformDiscrete extends javax.swing.JFrame {
         comboBoxSignal.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedOption = (String) e.getItem();
+                ImageIcon image;
                 switch (selectedOption) {
-                    case "Ninguna" -> {
+                    case "Ninguna":
                         lblImage.setIcon(null);
                         EverythingElse(false);
                         changeLimits(false,0,0);
-                    }
-                    case "Señal 4" ->{                    
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig1.png");
+                        break;
+                    case "Señal 4":                
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/discsig1.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
                         changeLimits(true,1,14);
-                    }
-                    case "Señal 5" ->{
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig2.png");
+                        break;
+                    case "Señal 5":
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/discsig2.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
                         changeLimits(false,-8,8);
-                    }
-                    case "Señal 6" ->{
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig3.png");
+                        break;
+                    case "Señal 6":
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/discsig3.png")));
                         lblImage.setIcon(image);
                         EverythingElse(true);
                         changeLimits(false,-5,6);
-                    }
+                        break; 
                 }
                 
             }
@@ -77,8 +78,18 @@ public class TransformDiscrete extends javax.swing.JFrame {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedOption = (String) e.getItem();
                 switch (selectedOption) {
-                    case "2", "3", "4", "5" -> comboBoxInterpol.setEnabled(false);
-                    case "1/2", "1/3", "1/4", "1/5" -> comboBoxInterpol.setEnabled(true);
+                    case "2": 
+                    case "3": 
+                    case "4": 
+                    case "5":
+                        comboBoxInterpol.setEnabled(false);
+                        break;
+                    case "1/2": 
+                    case "1/3":
+                    case "1/4":
+                    case "1/5":
+                        comboBoxInterpol.setEnabled(true);
+                        break;
                 }
             }
         });
@@ -356,7 +367,7 @@ public class TransformDiscrete extends javax.swing.JFrame {
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
         frame.setResizable(false);
     }//GEN-LAST:event_btnBackActionPerformed
@@ -376,7 +387,7 @@ public class TransformDiscrete extends javax.swing.JFrame {
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }else{
@@ -409,11 +420,11 @@ public class TransformDiscrete extends javax.swing.JFrame {
         double[] mn0 = new double[2];
         String mstr = (String) comboBoxAmp.getSelectedItem();
         switch (mstr){
-            case "1/2" -> mn0[0] = 1.0/2;
-            case "1/3" -> mn0[0] = 1.0/3;
-            case "1/4" -> mn0[0] = 1.0/4;
-            case "1/5" -> mn0[0] = 1.0/5;
-            default -> mn0[0] = Double.parseDouble(mstr);
+            case "1/2": mn0[0] = 1.0/2; break;
+            case "1/3": mn0[0] = 1.0/3; break;
+            case "1/4": mn0[0] = 1.0/4; break;
+            case "1/5": mn0[0] = 1.0/5; break;
+            default: mn0[0] = Double.parseDouble(mstr); break;
         }
         if (btnPMamp.getText().equals("-")){
             mn0[0] *= -1;
@@ -430,12 +441,11 @@ public class TransformDiscrete extends javax.swing.JFrame {
             pass = false;
         }
         if (pass){
-            dispose();
             DiscreteTransformed frame = new DiscreteTransformed(signal, limits, interpol, mn0, method);
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }else{

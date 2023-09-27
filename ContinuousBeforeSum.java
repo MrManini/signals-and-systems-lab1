@@ -150,7 +150,7 @@ public class ContinuousBeforeSum extends javax.swing.JFrame {
         JPanel1 = new javax.swing.JPanel();
         btnBack = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnBack.setFont(new java.awt.Font("Bahnschrift", 0, 12)); // NOI18N
         btnBack.setText("Volver");
@@ -186,12 +186,11 @@ public class ContinuousBeforeSum extends javax.swing.JFrame {
 
     
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        dispose();
         SignalSum frame = new SignalSum();
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
     }//GEN-LAST:event_btnBackActionPerformed
 

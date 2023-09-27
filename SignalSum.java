@@ -34,42 +34,43 @@ public class SignalSum extends javax.swing.JFrame {
         comboBoxSignal.addItemListener((ItemEvent e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String selectedOption = (String) e.getItem();
+                ImageIcon image, equation;
                 switch (selectedOption) {
-                    case "Ninguna" -> {
+                    case "Ninguna":
                         lblImage.setIcon(null);
                         appearSignalParameters(false, 0, 0);
                         EverythingElse(false);
-                    }
-                    case "Señal 2" ->{                    
+                        break;
+                    case "Señal 2":                 
                         appearSignalParameters(false, -1, 1);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/triangle.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/triangle.png")));
                         lblImage.setIcon(image);
-                        ImageIcon equation = new ImageIcon("C:/Users/kevin/Downloads/imgs/sumContinuous.png");
+                        equation = new ImageIcon((this.getClass().getResource("/tello/imgs/sumContinuous.png")));
                         lblEquation.setIcon(equation);
                         EverythingElse(true);
                         lblInterpol.setVisible(false);
                         comboBoxInterpol.setVisible(false);
-                    }
-                    case "Señal 4" ->{
+                        break;
+                    case "Señal 4":
                         appearSignalParameters(true, 0, 13);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig1.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/discsig1.png")));
                         lblImage.setIcon(image);
-                        ImageIcon equation = new ImageIcon("C:/Users/kevin/Downloads/imgs/sumDiscrete.png");
+                        equation = new ImageIcon((this.getClass().getResource("/tello/imgs/sumDiscrete.png")));
                         lblEquation.setIcon(equation);
                         EverythingElse(true);
                         lblInterpol.setVisible(true);
                         comboBoxInterpol.setVisible(true);
-                    }
-                    case "Señal 5" ->{
+                        break;
+                    case "Señal 5":
                         appearSignalParameters(false, -8, 8);
-                        ImageIcon image = new ImageIcon("C:/Users/kevin/Downloads/imgs/discsig2flip.png");
+                        image = new ImageIcon((this.getClass().getResource("/tello/imgs/discsig2flip.png")));
                         lblImage.setIcon(image);
-                        ImageIcon equation = new ImageIcon("C:/Users/kevin/Downloads/imgs/sumDiscrete.png");
+                        equation = new ImageIcon((this.getClass().getResource("/tello/imgs/sumDiscrete.png")));
                         lblEquation.setIcon(equation);
                         EverythingElse(true);
                         lblInterpol.setVisible(true);
                         comboBoxInterpol.setVisible(true);
-                    }
+                        break;
                 }
                 
             }
@@ -249,7 +250,7 @@ public class SignalSum extends javax.swing.JFrame {
         frame.setTitle("Primer Laboratorio Señales y Sistemas");
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+        ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
         frame.setIconImage(icon.getImage());
     }//GEN-LAST:event_btnBackActionPerformed
 
@@ -260,12 +261,11 @@ public class SignalSum extends javax.swing.JFrame {
         limits[1] = Double.parseDouble(txtUpperLimit.getText());
         String interpol = (String) comboBoxInterpol.getSelectedItem(); 
         if (signal.equals("Señal 2")){
-            dispose();
             ContinuousBeforeSum frame = new ContinuousBeforeSum();
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }else if (signal.equals("Señal 4") && limits[1]-limits[0]+1 != 14){
@@ -277,12 +277,11 @@ public class SignalSum extends javax.swing.JFrame {
             txtLowerLimit.setText("0");
             txtUpperLimit.setText("13");
         }else{
-            dispose();
             DiscreteBeforeSum frame = new DiscreteBeforeSum(signal, limits, interpol);
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }
@@ -295,12 +294,11 @@ public class SignalSum extends javax.swing.JFrame {
         limits[1] = Double.parseDouble(txtUpperLimit.getText());
         String interpol = (String) comboBoxInterpol.getSelectedItem(); 
         if (signal.equals("Señal 2")){
-            dispose();
             ContinuousAfterSum frame = new ContinuousAfterSum();
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }else if (signal.equals("Señal 4") && limits[1]-limits[0]+1 != 14){
@@ -312,12 +310,11 @@ public class SignalSum extends javax.swing.JFrame {
             txtLowerLimit.setText("0");
             txtUpperLimit.setText("13");
         }else{
-            dispose();
             DiscreteAfterSum frame = new DiscreteAfterSum(signal, limits, interpol);
             frame.setTitle("Primer Laboratorio Señales y Sistemas");
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
-            ImageIcon icon = new ImageIcon("C:/Users/kevin/Downloads/imgs/logo.png");
+            ImageIcon icon = new ImageIcon((this.getClass().getResource("/tello/imgs/logo.png")));
             frame.setIconImage(icon.getImage());
             frame.setResizable(false);
         }
